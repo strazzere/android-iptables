@@ -3,8 +3,8 @@
 #include <linux/netfilter/xt_cgroup.h>
 
 enum {
-	O_CLASSID = 0,
-	O_PATH = 1,
+	O_CLASSID_CGROUP = 0,
+	O_PATH_CGROUP = 1,
 };
 
 static void cgroup_help_v0(void)
@@ -25,7 +25,7 @@ static void cgroup_help_v1(void)
 static const struct xt_option_entry cgroup_opts_v0[] = {
 	{
 		.name = "cgroup",
-		.id = O_CLASSID,
+		.id = O_CLASSID_CGROUP,
 		.type = XTTYPE_UINT32,
 		.flags = XTOPT_INVERT | XTOPT_MAND | XTOPT_PUT,
 		XTOPT_POINTER(struct xt_cgroup_info_v0, id)
@@ -36,14 +36,14 @@ static const struct xt_option_entry cgroup_opts_v0[] = {
 static const struct xt_option_entry cgroup_opts_v1[] = {
 	{
 		.name = "path",
-		.id = O_PATH,
+		.id = O_PATH_CGROUP,
 		.type = XTTYPE_STRING,
 		.flags = XTOPT_INVERT | XTOPT_PUT,
 		XTOPT_POINTER(struct xt_cgroup_info_v1, path)
 	},
 	{
 		.name = "cgroup",
-		.id = O_CLASSID,
+		.id = O_CLASSID_CGROUP,
 		.type = XTTYPE_UINT32,
 		.flags = XTOPT_INVERT | XTOPT_PUT,
 		XTOPT_POINTER(struct xt_cgroup_info_v1, classid)
@@ -54,14 +54,14 @@ static const struct xt_option_entry cgroup_opts_v1[] = {
 static const struct xt_option_entry cgroup_opts_v2[] = {
 	{
 		.name = "path",
-		.id = O_PATH,
+		.id = O_PATH_CGROUP,
 		.type = XTTYPE_STRING,
 		.flags = XTOPT_INVERT | XTOPT_PUT,
 		XTOPT_POINTER(struct xt_cgroup_info_v2, path)
 	},
 	{
 		.name = "cgroup",
-		.id = O_CLASSID,
+		.id = O_CLASSID_CGROUP,
 		.type = XTTYPE_UINT32,
 		.flags = XTOPT_INVERT | XTOPT_PUT,
 		XTOPT_POINTER(struct xt_cgroup_info_v2, classid)
@@ -85,12 +85,12 @@ static void cgroup_parse_v1(struct xt_option_call *cb)
 	xtables_option_parse(cb);
 
 	switch (cb->entry->id) {
-	case O_PATH:
+	case O_PATH_CGROUP:
 		info->has_path = true;
 		if (cb->invert)
 			info->invert_path = true;
 		break;
-	case O_CLASSID:
+	case O_CLASSID_CGROUP:
 		info->has_classid = true;
 		if (cb->invert)
 			info->invert_classid = true;
@@ -105,12 +105,12 @@ static void cgroup_parse_v2(struct xt_option_call *cb)
 	xtables_option_parse(cb);
 
 	switch (cb->entry->id) {
-	case O_PATH:
+	case O_PATH_CGROUP:
 		info->has_path = true;
 		if (cb->invert)
 			info->invert_path = true;
 		break;
-	case O_CLASSID:
+	case O_CLASSID_CGROUP:
 		info->has_classid = true;
 		if (cb->invert)
 			info->invert_classid = true;
