@@ -90,6 +90,8 @@ EXT_SLIB += TRACE u32 udp
 
 EX_EXT_FUNC+=$(foreach T,$(PF_EXT_SLIB),xt_$(T))
 
+EXT_FUNC+=EX_EXT_FUNC
+
 # generated headers
 
 GEN_INITEXT:= $(intermediates)/extensions/gen_initext.c
