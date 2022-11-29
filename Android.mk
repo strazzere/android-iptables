@@ -29,7 +29,6 @@ include $(BUILD_STATIC_LIBRARY)
 
 # libxtables
 
-
 include $(CLEAR_VARS)
 
 LOCAL_C_INCLUDES:= \
@@ -66,7 +65,8 @@ LOCAL_C_INCLUDES:= \
 	$(KERNEL_HEADERS) \
 	$(intermediates)/extensions/
 
-LOCAL_CFLAGS:=-DNO_SHARED_LIBS
+LOCAL_CFLAGS:=-DNO_SHARED_LIBS -DXTABLES_INTERNAL -Wno-format -Wno-missing-field-initializers
+LOCAL_CFLAGS+=-Wno-pointer-bool-conversion -Wno-tautological-pointer-compare
 LOCAL_CFLAGS+=-D_INIT=$*_init
 LOCAL_CFLAGS+=-DIPTABLES_VERSION=\"1.8.7\"
 
@@ -76,9 +76,19 @@ PF_EXT_SLIB+=realm #owner state physdev pkttype policy sctp standard tcp
 PF_EXT_SLIB+=#DSCP ECN DNAT 2tos 2tcpmss 2ttl udp unclean CLASSIFY CONNMARK LOG
 PF_EXT_SLIB+=MASQUERADE NETMAP REDIRECT REJECT #MARK MIRROR NFQUEUE NOTRACK
 PF_EXT_SLIB+=SNAT ULOG # TOS TCPMSS TTL SAME statistic standard
-
 EXT_FUNC+=$(foreach T,$(PF_EXT_SLIB),ipt_$(T))
-EXT_FUNC+=$(foreach T,$(PF_EXT_SLIB),xt_$(T))
+
+EXT_SLIB := addrtype AUDIT bpf cgroup CHECKSUM CLASSIFY cluster comment connbytes
+EXT_SLIB += connlimit connmark CONNMARK CONNSECMARK conntrack # connlabel
+EXT_SLIB += cpu CT devgroup dscp DSCP ecn esp hashlimit helper HMARK # dccp
+EXT_SLIB += IDLETIMER ipcomp iprange LED length limit mac mark MARK # ipvs
+EXT_SLIB += multiport nfacct NFLOG NFQUEUE osf owner physdev pkttype
+EXT_SLIB += policy quota2 quota rateest RATEEST recent rpfilter sctp
+EXT_SLIB += SECMARK set SET socket standard statistic string SYNPROXY
+EXT_SLIB += tcp tcpmss TCPMSS TEE time tos TOS TPROXY # TCPOPTSTRIP
+EXT_SLIB += TRACE u32 udp
+
+EX_EXT_FUNC+=$(foreach T,$(PF_EXT_SLIB),xt_$(T))
 
 # generated headers
 
@@ -95,6 +105,7 @@ LOCAL_GENERATED_SOURCES:= $(GEN_INITEXT)
 
 LOCAL_SRC_FILES:= \
 	$(foreach T,$(PF_EXT_SLIB),extensions/libipt_$(T).c) \
+	$(foreach T,$(EXT_SLIB),extensions/libxt_$(T).c) \
 	extensions/initext.c
 
 # LOCAL_STATIC_LIBRARIES := \

@@ -1,6 +1,9 @@
 #ifndef _XTABLES_H
 #define _XTABLES_H
 
+#define ARRAY_SIZE(array) \
+    (sizeof(array) / sizeof(*array))
+
 /*
  * Changing any structs/functions may incur a needed change
  * in libxtables_vcurrent/vage too.
